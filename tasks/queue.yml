@@ -1,0 +1,61 @@
+---
+- name: Create folder structure for queue
+  no_log: True
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: 0775
+  with_items:
+    - '{{ install_directory }}/{{ queue_name }}'
+    - '{{ install_directory }}/{{ queue_name }}/{{ queue_name }}/tasks'
+
+- name: Copy gitignore file
+  no_log: True
+  copy:
+    src: '../files/{{ item }}'
+    dest: '{{ install_directory }}/{{ queue_name }}/{{ item }}'
+    mode: 0775
+  with_items:
+   - .gitignore
+
+- name: Copy tasks.py file
+  no_log: True
+  copy:
+    src: '../files/{{ item }}'
+    dest: '{{ install_directory }}/{{ queue_name }}/{{ queue_name }}/tasks/{{ item }}'
+    mode: 0775
+  with_items:
+   - tasks.py
+
+- set_fact:
+     init_item: 'from tasks import __init__'
+
+- name: Set up templates
+  no_log: True
+  template:
+    src: '../templates/{{ item }}'
+    dest: '{{ install_directory }}/{{ queue_name }}/{{ item }}'
+  with_items:
+   - setup.py
+   - README.md
+
+- set_fact:
+     init_item: 'from tasks import __init__'
+- name: Set up templates
+  no_log: True
+  template:
+    src: '../templates/{{ item }}'
+    dest: '{{ install_directory }}/{{ queue_name }}/{{ queue_name }}/{{ item }}'
+  with_items:
+   - __init__.py
+
+- set_fact:
+     init_item: 'from tasks import *'
+
+- name: Set up templates
+  no_log: True
+  template:
+    src: '../templates/{{ item }}'
+    dest: '{{ install_directory }}/{{ queue_name }}/{{ queue_name }}/tasks/{{ item }}'
+  with_items:
+   - __init__.py

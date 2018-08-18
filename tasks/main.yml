@@ -1,0 +1,3 @@
+---
+# tasks file for ansible-role-celeryq
+- import_tasks: queue.yml

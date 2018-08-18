@@ -1,0 +1,5 @@
+---
+# defaults file for ansible-role-celeryq
+
+queue_name: "cybercomq"
+install_directory: "{{ lookup('env', 'PWD') }}"
